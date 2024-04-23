@@ -4,4 +4,8 @@ export type Card = {
     cardNumber: string;
     validThru: string;
     userName: string;
+    limit: number;
+    currentDebt: number;
+    remainingDebt: number;
+    debitDate: Date;
 };

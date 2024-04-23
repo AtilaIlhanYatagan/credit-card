@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import CardListItem from './CardListItem'
-import { FlatList } from 'react-native-gesture-handler'
+import { FlatList, RefreshControl } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RootStackParamList } from '../navigation/stackNavigator'
@@ -10,20 +10,28 @@ import { Card } from '../types/card.type'
 const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   
-  const [cards, setCards] = React.useState<Card[]>([]) 
+  const [cards, setCards] = useState<Card[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getCards();
-        setCards(response);
-      } catch (error) {
-        console.error('Error fetching cards:', error);
-      }
-    };
-
     fetchData();
   }, []); // Pass an empty array as second argument to useEffect to run only once
+
+  const fetchData = async () => {
+    try {
+      const response = await getCards();
+      setCards(response);
+    } catch (error) {
+      console.error('Error fetching cards:', error);
+    } finally {
+      setRefreshing(false); // Ensure refreshing state is reset even if there's an error
+    }
+  };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchData();
+  };
 
   const handleItemPress = (id: string) => {
     navigation.navigate('CardDetail', { itemId: id })
@@ -42,6 +50,7 @@ const HomeScreen = () => {
         />
       )}
       keyExtractor={(item) => item._id}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     />
 
   )
