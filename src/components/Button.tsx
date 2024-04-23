@@ -20,12 +20,14 @@ export default Button;
 
 const styles = StyleSheet.create({
     container: {
-        flex:1
+        flex: 1
     },
     button: {
         backgroundColor: 'white',
         padding: 10,
         borderRadius: 5,
+        height: 40,
+        justifyContent: 'center',
         borderWidth: 1,
         borderColor: 'grey',
         alignItems: 'center',

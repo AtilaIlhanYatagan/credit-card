@@ -2,19 +2,20 @@ import { StyleSheet, ScrollView, ActivityIndicator, View } from 'react-native'
 import React, { useEffect } from 'react'
 import CardListItem from './CardListItem'
 import { RootStackParamList } from '../navigation/stackNavigator';
-import type { RouteProp } from '@react-navigation/native';
+import { useNavigation, type RouteProp } from '@react-navigation/native';
 import { Card } from '../types/card.type';
 import { getCard } from '../api/cardApi';
 import Button from '../components/Button';
 import DateSection from '../components/DateSection';
 import PaymentSummary from '../components/PaymentSummary';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'CardDetail'>;
 const CardDetail = ({ route }: { route: ProfileScreenRouteProp }) => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const [card, setCard] = React.useState<Card>();
   const [loading, setLoading] = React.useState(true);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,14 +70,25 @@ const CardDetail = ({ route }: { route: ProfileScreenRouteProp }) => {
       <View style={styles.row}>
         <Button onPress={() => console.log("Pay Depth")} text="Pay Depth"></Button>
         <View style={styles.rowSpacer}></View>
-        <Button onPress={() => console.log("Payments")} text="Payments"></Button>
+        <Button
+          onPress={() =>
+            navigation.navigate("Payments", {
+              cardId: card!._id,
+              availableBalance: card!.limit - card!.remainingDebt - card!.currentDebt
+            })
+          }
+          text="Payments"
+        />
+
       </View>
+
       <View style={styles.row}>
         <Button onPress={() => console.log("Transactions ")} text="Transactions"></Button>
         <View style={styles.rowSpacer}></View>
         <Button onPress={() => console.log("Limit Update")} text="Limit Update"></Button>
       </View>
-    </ScrollView>
+
+    </ScrollView >
   )
 }
 const styles = StyleSheet.create({
