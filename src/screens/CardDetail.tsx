@@ -77,16 +77,23 @@ const CardDetail = ({ route }: { route: ProfileScreenRouteProp }) => {
               availableBalance: card!.limit - card!.remainingDebt - card!.currentDebt
             })
           }
-          text="Payments"
+          text="Make Payment"
         />
 
       </View>
 
       <View style={styles.row}>
-        <Button onPress={() => console.log("Transactions ")} text="Transactions"></Button>
-        <View style={styles.rowSpacer}></View>
-        <Button onPress={() => console.log("Limit Update")} text="Limit Update"></Button>
-      </View>
+        <Button
+          onPress={() =>
+            navigation.navigate("Transactions", {
+              cardId: card!._id,
+            })
+          }
+          text="Transactions"
+        />
+      <View style={styles.rowSpacer}></View>
+      <Button onPress={() => console.log("Limit Update")} text="Limit Update"></Button>
+    </View>
 
     </ScrollView >
   )
