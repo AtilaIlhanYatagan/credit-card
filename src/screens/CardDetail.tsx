@@ -91,9 +91,14 @@ const CardDetail = ({ route }: { route: ProfileScreenRouteProp }) => {
           }
           text="Transactions"
         />
-      <View style={styles.rowSpacer}></View>
-      <Button onPress={() => console.log("Limit Update")} text="Limit Update"></Button>
-    </View>
+        <View style={styles.rowSpacer}></View>
+        <Button onPress={() =>
+          navigation.navigate("LimitUpdate", {
+            cardId: card!._id,
+            currentLimit: card!.limit
+          })
+          } text="Limit Update"></Button>
+      </View>
 
     </ScrollView >
   )
