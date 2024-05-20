@@ -9,6 +9,7 @@ import Button from '../components/Button';
 import DateSection from '../components/DateSection';
 import PaymentSummary from '../components/PaymentSummary';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { RefreshControl } from 'react-native-gesture-handler';
 
 type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'CardDetail'>;
 const CardDetail = ({ route }: { route: ProfileScreenRouteProp }) => {
@@ -17,20 +18,26 @@ const CardDetail = ({ route }: { route: ProfileScreenRouteProp }) => {
   const [card, setCard] = React.useState<Card>();
   const [loading, setLoading] = React.useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await getCard(route.params.itemId);
-        setCard(response);
-      } catch (error) {
-        console.error('Error fetching cards:', error);
-      }
-      setLoading(false);
-    };
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await getCard(route.params.itemId);
+      setCard(response);
+    } catch (error) {
+      console.error('Error fetching cards:', error);
+    }
+    setLoading(false);
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
+
+  const onRefresh = async () => {
+    setLoading(true);
+    await fetchData();
+    setLoading(false);
+  };
 
   if (loading) {
     return <ActivityIndicator />
@@ -44,7 +51,12 @@ const CardDetail = ({ route }: { route: ProfileScreenRouteProp }) => {
   nextDebitDate.setMonth(nextDebitDate.getMonth() + 1);
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView 
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+      }
+    >
 
       <CardListItem
         cardName={card!.cardName}
