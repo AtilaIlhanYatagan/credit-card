@@ -80,7 +80,12 @@ const CardDetail = ({ route }: { route: ProfileScreenRouteProp }) => {
 
 
       <View style={styles.row}>
-        <Button onPress={() => console.log("Pay Depth")} text="Pay Depth"></Button>
+      <Button onPress={() =>
+          navigation.navigate("PayDebt", {
+            cardId: card!._id,
+            currentDebt: card!.currentDebt
+          })
+          } text="Pay Debt"></Button>
         <View style={styles.rowSpacer}></View>
         <Button
           onPress={() =>

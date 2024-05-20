@@ -4,6 +4,7 @@ import CardDetail from "../screens/CardDetail";
 import Payments from "../screens/Payments";
 import Transactions from "../screens/Transactions";
 import LimitUpdate from "../screens/LimitUpdate";
+import PayDebt from "../screens/PayDebt";
 
 export type RootStackParamList = {
     HomeScreen: undefined
@@ -11,6 +12,7 @@ export type RootStackParamList = {
     Payments: { cardId: string, availableBalance: number };
     Transactions: { cardId: string };
     LimitUpdate: { cardId: string, currentLimit: number };
+    PayDebt: { cardId: string, currentDebt: number };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -39,6 +41,10 @@ export const StackNavigator = () => {
                 options={{ title: "Limit Update" }}
                 name="LimitUpdate"
                 component={LimitUpdate} />
+            <Stack.Screen
+                options={{ title: "Pay Debt" }}
+                name="PayDebt"
+                component={PayDebt} />
         </Stack.Navigator>
     );
 }
